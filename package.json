@@ -1,0 +1,20 @@
+{
+  "name": "kiai",
+  "version": "1.0.0",
+  "description": "気合 Kiai",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Everything OK\" && exit 1"
+  },
+  "keywords": [
+    "go",
+    "weiqi",
+    "baduk"
+  ],
+  "author": "Horace Ho",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^22.0.0"
+  }
+}
