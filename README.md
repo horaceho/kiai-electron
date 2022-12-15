@@ -3,6 +3,14 @@
 気合 Kiai is built for studying [go](https://en.wikipedia.org/wiki/Go_(game)) games.
 
 ### Development
+
+```bash
+git clone git@github.com:horaceho/kiai.git Kiai
+cd Kiai
+npm install
+npm start
+```
+
 <details>
   <summary>Debug in VS Code</summary>
 
