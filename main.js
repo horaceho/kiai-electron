@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Menu, MenuItem } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu, MenuItem, nativeTheme } = require('electron')
 const path = require('path')
 
 const createWindow = () => {
@@ -10,8 +10,23 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
     },
   })
-  ipcMain.handle('help', () => 'HELP')
+
   win.loadFile('index.html')
+
+  ipcMain.handle('help', () => 'HELP')
+
+  ipcMain.handle('dark-mode:toggle', () => {
+    if (nativeTheme.shouldUseDarkColors) {
+      nativeTheme.themeSource = 'light'
+    } else {
+      nativeTheme.themeSource = 'dark'
+    }
+    return nativeTheme.shouldUseDarkColors
+  })
+
+  ipcMain.handle('dark-mode:system', () => {
+    nativeTheme.themeSource = 'system'
+  })
 }
 
 const menu = new Menu()

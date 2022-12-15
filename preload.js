@@ -9,3 +9,8 @@ contextBridge.exposeInMainWorld('versions', {
 contextBridge.exposeInMainWorld('bridges', {
   help: () => ipcRenderer.invoke('help'),
 })
+
+contextBridge.exposeInMainWorld('darkMode', {
+  toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
+  system: () => ipcRenderer.invoke('dark-mode:system')
+})
