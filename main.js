@@ -1,12 +1,16 @@
-const { app, BrowserWindow, Menu, MenuItem } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu, MenuItem } = require('electron')
+const path = require('path')
 
 const createWindow = () => {
   const win = new BrowserWindow({
     frame: true,
     width: 800,
     height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+    },
   })
-
+  ipcMain.handle('help', () => 'HELP')
   win.loadFile('index.html')
 }
 
@@ -17,6 +21,10 @@ menu.append(new MenuItem({
     role: 'help',
     accelerator: process.platform === 'darwin' ? 'Cmd+I' : 'Alt+I',
     click: () => { console.log(process.platform === 'darwin' ? '⌘+I' : '⌥+I') }
+  }, {
+    role: 'quit',
+    accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Alt+Q',
+    click: () => { app.quit() }
   }]
 }))
 Menu.setApplicationMenu(menu)
