@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <title>Kiai</title>
 </head>
 <body>
     <p>Hello from Electron 👋</p>
+    <div><span>Last Key Pressed: </span><span id="last-keypress"></span></div>
+    <script src="./renderer.js"></script>
 </body>
 </html>
