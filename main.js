@@ -6,12 +6,18 @@ const createWindow = () => {
     frame: true,
     width: 800,
     height: 600,
+    minWidth: 800,
+    minHeight: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
   })
 
   win.loadFile('index.html')
+
+  win.on('resize', () => {
+    // console.log(win.getSize())
+  })
 
   ipcMain.handle('help', () => 'HELP')
 
