@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, Menu, MenuItem, nativeTheme } = require('electron')
+const fs = require('fs');
 const path = require('path')
 const { template } = require('./menu')
 
@@ -15,6 +16,7 @@ const createWindow = () => {
   })
 
   win.loadFile('index.html')
+  win.webContents.openDevTools()
 
   win.on('resize', () => {
     // console.log(win.getSize())
@@ -26,6 +28,10 @@ Menu.setApplicationMenu(menu)
 
 app.whenReady().then(() => {
   createWindow()
+
+  ipcMain.handle('getFileStat', (event, path) => {
+    return fs.statSync(path)
+  })
 
   ipcMain.handle('ping', () => 'PONG')
 

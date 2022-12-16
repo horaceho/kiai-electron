@@ -8,6 +8,7 @@ contextBridge.exposeInMainWorld('versions', {
 
 contextBridge.exposeInMainWorld('bridges', {
   ping: () => ipcRenderer.invoke('ping'),
+  getFileStat: (path) => ipcRenderer.invoke('getFileStat', path),
 })
 
 contextBridge.exposeInMainWorld('darkMode', {
