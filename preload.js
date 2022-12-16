@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld('versions', {
 })
 
 contextBridge.exposeInMainWorld('bridges', {
-  help: () => ipcRenderer.invoke('help'),
+  ping: () => ipcRenderer.invoke('ping'),
 })
 
 contextBridge.exposeInMainWorld('darkMode', {

@@ -1,12 +1,12 @@
-const help = async () => {
-  const response = await window.bridges.help()
+const ping = async () => {
+  const response = await window.bridges.ping()
   console.log(response)
 }
 
 function handleKeyPress(event) {
   document.getElementById("last-keypress").innerText = event.key
   if (event.key === '?') {
-    help();
+    ping();
   }
   console.log(`keyPress: ${event.key}`)
 }

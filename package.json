@@ -1,7 +1,8 @@
 {
   "name": "kiai",
+  "productName": "Kiai",
   "version": "1.0.0",
-  "description": "気合 Kiai",
+  "description": "気合 Kiai is built for studying go games",
   "main": "main.js",
   "scripts": {
     "start": "electron .",

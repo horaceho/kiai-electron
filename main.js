@@ -1,10 +1,11 @@
 const { app, BrowserWindow, ipcMain, Menu, MenuItem, nativeTheme } = require('electron')
 const path = require('path')
+const { template } = require('./menu')
 
 const createWindow = () => {
   const win = new BrowserWindow({
     frame: true,
-    width: 800,
+    width: 1200,
     height: 600,
     minWidth: 800,
     minHeight: 600,
@@ -18,8 +19,15 @@ const createWindow = () => {
   win.on('resize', () => {
     // console.log(win.getSize())
   })
+}
 
-  ipcMain.handle('help', () => 'HELP')
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu)
+
+app.whenReady().then(() => {
+  createWindow()
+
+  ipcMain.handle('ping', () => 'PONG')
 
   ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
@@ -33,25 +41,6 @@ const createWindow = () => {
   ipcMain.handle('dark-mode:system', () => {
     nativeTheme.themeSource = 'system'
   })
-}
-
-const menu = new Menu()
-menu.append(new MenuItem({
-  label: '気合 Kiai',
-  submenu: [{
-    role: 'help',
-    accelerator: process.platform === 'darwin' ? 'Cmd+I' : 'Alt+I',
-    click: () => { console.log(process.platform === 'darwin' ? '⌘+I' : '⌥+I') }
-  }, {
-    role: 'quit',
-    accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Alt+Q',
-    click: () => { app.quit() }
-  }]
-}))
-Menu.setApplicationMenu(menu)
-
-app.whenReady().then(() => {
-  createWindow()
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
