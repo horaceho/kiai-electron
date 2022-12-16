@@ -22,3 +22,7 @@ document.getElementById('reset-to-system').addEventListener('click', async () =>
   await window.darkMode.system()
   document.getElementById('theme-source').innerHTML = 'System'
 })
+
+document.addEventListener('click', (event) => {
+  console.log('handleClick()', event.clientX, event.clientY)
+})
