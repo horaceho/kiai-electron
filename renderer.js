@@ -28,6 +28,61 @@ document.addEventListener('click', (event) => {
 })
 
 //
+// Board
+//
+function draggable(element) {
+  var diffX = 0, diffY = 0, lastX = 0, lastY = 0;
+  element.onmousedown = dragMouseDown;
+  element.onmouseover = (event) => {
+    document.body.style.cursor = 'move';
+  };
+  element.onmouseout = (event) => {
+    document.body.style.cursor = 'default';
+  };
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    lastX = e.clientX;
+    lastY = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+    console.log('MouseDown', e.clientX, e.clientY)
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    diffX = lastX - e.clientX;
+    diffY = lastY - e.clientY;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    // set the element's new position:
+    element.style.left = (element.offsetLeft - diffX) + "px";
+    element.style.top = (element.offsetTop - diffY) + "px";
+  }
+
+  function closeDragElement(e) {
+    e = e || window.event;
+    e.preventDefault();
+    document.onmouseup = null;
+    document.onmousemove = null;
+    console.log('MouseUp', e.clientX, e.clientY)
+  }
+}
+
+var board = document.getElementById('board');
+draggable(board);
+
+var canvas = document.getElementById('canvas');
+var context = canvas.getContext("2d");
+context.fillStyle = "grey";
+context.fillRect(0, 0, canvas.width, canvas.height);
+
+//
 // Files drag and drop
 //
 document.addEventListener('drop', async (event) => {
