@@ -32,33 +32,24 @@ document.addEventListener('click', (event) => {
 //
 function draggable(element, sizeX = 19, sizeY = 19) {
   var diffX = 0, diffY = 0, lastX = 0, lastY = 0, count = 0
-  let gridWidth = element.offsetWidth / sizeX
-  let gridheight = element.offsetHeight / sizeY
-  var gridX = -1, gridY = -1
-  element.onmousedown = dragMouseDown
-  element.onmouseover = (event) => {
-    document.body.style.cursor = 'move'
-  }
-  element.onmouseout = (event) => {
-    document.body.style.cursor = 'default'
-  }
+  element.onmousedown = dragStartUp
 
-  function dragMouseDown(e) {
+  function dragStartUp(e) {
     e = e || window.event
     e.preventDefault()
     // get the mouse cursor position at startup
     lastX = e.clientX
     lastY = e.clientY
-    document.onmouseup = closeDragElement
-    // call a function whenever the cursor moves
-    document.onmousemove = elementDrag
+    document.onmousemove = dragElement
+    document.onmouseup = dragCleanUp
+    if (e.shiftKey) {
+      document.body.style.cursor = 'move'
+    }
     count = 0
-    gridX = Math.trunc((e.clientX - element.offsetLeft) / gridWidth)
-    gridY = Math.trunc((e.clientY - element.offsetTop) / gridheight)
-    console.log('MouseDown', e.clientX, e.clientY, gridX, gridY)
+    // console.log('dragStartUp', e.clientX, e.clientY)
   }
 
-  function elementDrag(e) {
+  function dragElement(e) {
     e = e || window.event
     e.preventDefault()
     // calculate the new cursor position
@@ -82,25 +73,51 @@ function draggable(element, sizeX = 19, sizeY = 19) {
     if (top + element.offsetHeight + margin > window.innerHeight) {
       top = window.innerHeight - e.offsetHeight - margin
     }
-    element.style.left = left + "px"
-    element.style.top = top + "px"
+    if (e.shiftKey) {
+      element.style.left = left + "px"
+      element.style.top = top + "px"
+      document.body.style.cursor = 'move'
+    }
     count += 1
   }
 
-  function closeDragElement(e) {
+  function dragCleanUp(e) {
     e = e || window.event
     e.preventDefault()
     document.onmouseup = null
     document.onmousemove = null
-    if (gridX === Math.trunc((e.clientX - element.offsetLeft) / gridWidth) && gridY === Math.trunc((e.clientY - element.offsetTop) / gridheight)) {
-      console.log('Grid', gridX, gridY)
-    }
-    console.log('MouseUp', e.clientX, e.clientY, count)
+    document.body.style.cursor = 'default'
+    // console.log('dragCleanUp', e.clientX, e.clientY)
   }
 }
 
-var board = document.getElementById('board')
-draggable(board)
+function clickable(element, sizeX = 19, sizeY = 19) {
+  let gridWidth = element.offsetWidth / sizeX
+  let gridheight = element.offsetHeight / sizeY
+  var gridX = -1, gridY = -1
+  element.onmousedown = clickMouseDown
+  element.onmouseup = clickMouseUp
+
+  function clickMouseDown(e) {
+    e = e || window.event
+    e.preventDefault()
+    gridX = Math.trunc((e.clientX - element.offsetLeft) / gridWidth)
+    gridY = Math.trunc((e.clientY - element.offsetTop) / gridheight)
+    // console.log('clickMouseDown', e.clientX, e.clientY, gridX, gridY)
+  }
+
+  function clickMouseUp(e) {
+    e = e || window.event
+    e.preventDefault()
+    if (gridX === Math.trunc((e.clientX - element.offsetLeft) / gridWidth) && gridY === Math.trunc((e.clientY - element.offsetTop) / gridheight)) {
+      console.log('Grid', gridX, gridY)
+    }
+    // console.log('clickMouseUp', e.clientX, e.clientY, gridX, gridY)
+  }
+}
+
+clickable(document.getElementById('board'))
+draggable(document.getElementById('frame'))
 
 var canvas = document.getElementById('canvas')
 var context = canvas.getContext("2d")
