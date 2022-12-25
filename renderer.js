@@ -43,11 +43,11 @@ function draggable(element) {
   function dragMouseDown(e) {
     e = e || window.event;
     e.preventDefault();
-    // get the mouse cursor position at startup:
+    // get the mouse cursor position at startup
     lastX = e.clientX;
     lastY = e.clientY;
     document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
+    // call a function whenever the cursor moves
     document.onmousemove = elementDrag;
     console.log('MouseDown', e.clientX, e.clientY)
   }
@@ -55,14 +55,29 @@ function draggable(element) {
   function elementDrag(e) {
     e = e || window.event;
     e.preventDefault();
-    // calculate the new cursor position:
+    // calculate the new cursor position
     diffX = lastX - e.clientX;
     diffY = lastY - e.clientY;
     lastX = e.clientX;
     lastY = e.clientY;
-    // set the element's new position:
-    element.style.left = (element.offsetLeft - diffX) + "px";
-    element.style.top = (element.offsetTop - diffY) + "px";
+    // set the element's new position
+    let margin = 8
+    var left = element.offsetLeft - diffX;
+    var top = element.offsetTop - diffY;
+    if (left < margin) {
+      left = margin;
+    }
+    if (top < margin) {
+      top = margin;
+    }
+    if (left + element.offsetWidth + margin > window.innerWidth) {
+      left = window.innerWidth - e.offsetWidth - margin;
+    }
+    if (top + element.offsetHeight + margin > window.innerHeight) {
+      top = window.innerHeight - e.offsetHeight - margin;
+    }
+    element.style.left = left + "px";
+    element.style.top = top + "px";
   }
 
   function closeDragElement(e) {
