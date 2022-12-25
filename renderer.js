@@ -6,7 +6,7 @@ const ping = async () => {
 function handleKeyPress(event) {
   document.getElementById("last-keypress").innerText = event.key
   if (event.key === '?') {
-    ping();
+    ping()
   }
   console.log(`keyPress: ${event.key}`)
 }
@@ -30,79 +30,89 @@ document.addEventListener('click', (event) => {
 //
 // Board
 //
-function draggable(element) {
-  var diffX = 0, diffY = 0, lastX = 0, lastY = 0;
-  element.onmousedown = dragMouseDown;
+function draggable(element, sizeX = 19, sizeY = 19) {
+  var diffX = 0, diffY = 0, lastX = 0, lastY = 0, count = 0
+  let gridWidth = element.offsetWidth / sizeX
+  let gridheight = element.offsetHeight / sizeY
+  var gridX = -1, gridY = -1
+  element.onmousedown = dragMouseDown
   element.onmouseover = (event) => {
-    document.body.style.cursor = 'move';
-  };
+    document.body.style.cursor = 'move'
+  }
   element.onmouseout = (event) => {
-    document.body.style.cursor = 'default';
-  };
+    document.body.style.cursor = 'default'
+  }
 
   function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
+    e = e || window.event
+    e.preventDefault()
     // get the mouse cursor position at startup
-    lastX = e.clientX;
-    lastY = e.clientY;
-    document.onmouseup = closeDragElement;
+    lastX = e.clientX
+    lastY = e.clientY
+    document.onmouseup = closeDragElement
     // call a function whenever the cursor moves
-    document.onmousemove = elementDrag;
-    console.log('MouseDown', e.clientX, e.clientY)
+    document.onmousemove = elementDrag
+    count = 0
+    gridX = Math.trunc((e.clientX - element.offsetLeft) / gridWidth)
+    gridY = Math.trunc((e.clientY - element.offsetTop) / gridheight)
+    console.log('MouseDown', e.clientX, e.clientY, gridX, gridY)
   }
 
   function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
+    e = e || window.event
+    e.preventDefault()
     // calculate the new cursor position
-    diffX = lastX - e.clientX;
-    diffY = lastY - e.clientY;
-    lastX = e.clientX;
-    lastY = e.clientY;
+    diffX = lastX - e.clientX
+    diffY = lastY - e.clientY
+    lastX = e.clientX
+    lastY = e.clientY
     // set the element's new position
     let margin = 8
-    var left = element.offsetLeft - diffX;
-    var top = element.offsetTop - diffY;
+    var left = element.offsetLeft - diffX
+    var top = element.offsetTop - diffY
     if (left < margin) {
-      left = margin;
+      left = margin
     }
     if (top < margin) {
-      top = margin;
+      top = margin
     }
     if (left + element.offsetWidth + margin > window.innerWidth) {
-      left = window.innerWidth - e.offsetWidth - margin;
+      left = window.innerWidth - e.offsetWidth - margin
     }
     if (top + element.offsetHeight + margin > window.innerHeight) {
-      top = window.innerHeight - e.offsetHeight - margin;
+      top = window.innerHeight - e.offsetHeight - margin
     }
-    element.style.left = left + "px";
-    element.style.top = top + "px";
+    element.style.left = left + "px"
+    element.style.top = top + "px"
+    count += 1
   }
 
   function closeDragElement(e) {
-    e = e || window.event;
-    e.preventDefault();
-    document.onmouseup = null;
-    document.onmousemove = null;
-    console.log('MouseUp', e.clientX, e.clientY)
+    e = e || window.event
+    e.preventDefault()
+    document.onmouseup = null
+    document.onmousemove = null
+    if (gridX === Math.trunc((e.clientX - element.offsetLeft) / gridWidth) && gridY === Math.trunc((e.clientY - element.offsetTop) / gridheight)) {
+      console.log('Grid', gridX, gridY)
+    }
+    console.log('MouseUp', e.clientX, e.clientY, count)
   }
 }
 
-var board = document.getElementById('board');
-draggable(board);
+var board = document.getElementById('board')
+draggable(board)
 
-var canvas = document.getElementById('canvas');
-var context = canvas.getContext("2d");
-context.fillStyle = "grey";
-context.fillRect(0, 0, canvas.width, canvas.height);
+var canvas = document.getElementById('canvas')
+var context = canvas.getContext("2d")
+context.fillStyle = "grey"
+context.fillRect(0, 0, canvas.width, canvas.height)
 
 //
 // Files drag and drop
 //
 document.addEventListener('drop', async (event) => {
-  event.preventDefault();
-  event.stopPropagation();
+  event.preventDefault()
+  event.stopPropagation()
   for (const file of event.dataTransfer.files) {
     const stat = await window.bridges.getFileStat(file.path)
     console.log('drop', file.path, stat.size)
@@ -110,14 +120,14 @@ document.addEventListener('drop', async (event) => {
 })
 
 document.addEventListener('dragover', (event) => {
-  event.preventDefault();
-  event.stopPropagation();
+  event.preventDefault()
+  event.stopPropagation()
 })
 
 document.addEventListener('dragenter', (event) => {
-  // console.log('File is in the Drop Space');
+  // console.log('File is in the Drop Space')
 })
 
 document.addEventListener('dragleave', (event) => {
-  // console.log('File has left the Drop Space');
+  // console.log('File has left the Drop Space')
 })
